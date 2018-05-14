@@ -34,7 +34,7 @@ ROOT_URLCONF = 'microblog.urls'
 # See https://docs.djangoproject.com/en/2.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '!a3khy$@-xx(j523z0)xr6=#-_(m9tkc)k_4@jd9$i$76+xis5'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
