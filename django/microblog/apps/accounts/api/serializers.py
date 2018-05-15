@@ -53,16 +53,31 @@ class RegisterSerializer(serializers.Serializer):
         )
 
         # Create our user profile at the same time
-        user_profile = UserProfile.objects.create(user=new_user)
+        UserProfile.objects.create(user=new_user)
 
         login(self.context.get('request'), new_user)
 
 
 class ProfileSerializer(serializers.ModelSerializer):
 
+    user = serializers.SlugRelatedField(read_only=True, slug_field='username')
+    feed_is_public = serializers.BooleanField()
+    following = serializers.SerializerMethodField()
+
     class Meta:
         model = UserProfile
-        exclude = ('user', 'id', 'following')
+
+    def get_following(self):
+
+        if self.contex['request'].user is None:
+            return False
+
+        if self.context['request'].user.profile == self.instance:
+            # We follow ourselves, of course.
+            return True
+
+        return self.context['request'].user.profile in self.instance.get_followers()
+
 
 
 class FollowUserSerializer(serializers.Serializer):

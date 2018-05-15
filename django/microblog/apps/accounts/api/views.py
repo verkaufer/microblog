@@ -1,12 +1,15 @@
 from django.contrib.auth import login, logout
+from django.shortcuts import get_object_or_404
 
 from rest_framework.generics import GenericAPIView, RetrieveUpdateAPIView, CreateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly
 from rest_framework import status
+from rest_framework.exceptions import MethodNotAllowed
 
-from accounts.permissions import UnauthenticatedOnly
+from feeds.permissions import IsOwnerOrReadOnly
+
 from accounts.authenticators import NoAuthForRegistration
 from accounts.models import UserProfile, FOLLOWING
 from .serializers import LoginSerializer, RegisterSerializer, ProfileSerializer, FollowUserSerializer
@@ -50,14 +53,15 @@ class RegisterView(CreateAPIView):
 
 class ProfileView(RetrieveUpdateAPIView):
 
-    permission_classes = (IsAuthenticated, )
-
+    permission_classes = (IsOwnerOrReadOnly,)
     serializer_class = ProfileSerializer
+    lookup_url_kwarg = 'username'
 
     def get_object(self):
+        return get_object_or_404(UserProfile.objects.get(user__username__iexact=self.kwargs[self.lookup_url_kwarg]))
 
-        return UserProfile.objects.get(user=self.request.user)
-
+    def put(self, request, *args, **kwargs):
+        raise MethodNotAllowed
 
 class FollowUserView(GenericAPIView):
 
@@ -85,5 +89,3 @@ class FollowUserView(GenericAPIView):
 
         request.user.profile.remove_relation(profile_to_unfollow, FOLLOWING)
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-
