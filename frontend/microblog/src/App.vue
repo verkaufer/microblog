@@ -7,12 +7,14 @@
 
         <b-nav-toggle target="nav_collapse"></b-nav-toggle>
 
-        <b-navbar-brand href="/" class="font-weight-bold">DonutTracker 🍩</b-navbar-brand>
+        <b-navbar-brand href="/" class="font-weight-bold">MicroBlog</b-navbar-brand>
 
         <b-collapse is-nav id="nav_collapse">
           <b-navbar-nav>
             <b-nav-item to="/">Home</b-nav-item>
-            <b-nav-item to="/favorites">Favorites</b-nav-item>
+            <b-nav-item to="/profile">Profile</b-nav-item>
+            <b-nav-item to="/login">Login</b-nav-item>
+            <b-nav-item to="/signup">Sign-up</b-nav-item>
             <!-- <b-nav-item v-if="!authenticated" to="/login">Login</b-nav-item>
             <b-nav-item v-if="authenticated" @click="logout">Logout</b-nav-item>
 

@@ -22,7 +22,7 @@ class LoginSerializer(serializers.Serializer):
         return username
 
     def validate(self, attrs):
-        # validate user and password are valid and match
+        # validate user and password are valid
         user = authenticate(username=attrs['username'], password=attrs['password'])
 
         if user is None:
@@ -42,8 +42,7 @@ class RegisterSerializer(serializers.Serializer):
         user_with_username = User.objects.filter(username=username)
 
         if user_with_username.exists():
-            raise DRFValidationError
-
+            raise DRFValidationError("Unable to create user.")
         return username
 
     def save(self):
@@ -66,10 +65,13 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = UserProfile
+        exclude = ('id', 'relations',)
+        read_only_fields = ('following', 'relations',)
 
-    def get_following(self):
+    def get_following(self, obj):
 
-        if self.contex['request'].user is None:
+        if not self.context['request'].user or \
+            not self.context['request'].user.is_authenticated:
             return False
 
         if self.context['request'].user.profile == self.instance:
@@ -77,7 +79,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             return True
 
         return self.context['request'].user.profile in self.instance.get_followers()
-
 
 
 class FollowUserSerializer(serializers.Serializer):
@@ -98,8 +99,3 @@ class FollowUserSerializer(serializers.Serializer):
         user_to_follow_profile, _ = UserProfile.objects.get_or_create(user__id=self.validated_data['user_to_follow'])
 
         current_user.profile.add_relation(user_to_follow_profile, FOLLOWING)
-
-
-
-
-

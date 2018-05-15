@@ -6,7 +6,7 @@ volumes:
 
 services:
   nginx-proxy:
-    image: nginx-stable
+    image: nginx:stable
     ports:
       - "80:80"
     volumes:

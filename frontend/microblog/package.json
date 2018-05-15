@@ -5,7 +5,7 @@
   "author": "David Gunter <david@davidgunter.ca>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --host 0.0.0.0 --port 4200 --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --host 0.0.0.0 --port 4200 --disable-host-check --config build/webpack.dev.conf.js",
     "start": "npm run dev",
     "unit": "jest --config test/unit/jest.conf.js --coverage",
     "test": "npm run unit",
