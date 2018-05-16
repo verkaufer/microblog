@@ -84,7 +84,6 @@ class ProfileSerializer(serializers.ModelSerializer):
 class FollowUserSerializer(serializers.Serializer):
 
     user_to_follow = serializers.IntegerField()
-    follow_type = serializers.ChoiceField(choices=RELATION_TYPES)
 
     def validiate_user_to_follow(self, user_to_follow):
         try:

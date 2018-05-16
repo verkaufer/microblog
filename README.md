@@ -17,6 +17,8 @@ Implements a Twitter-esque web application using:
 
 ## Project Setup
 
+Before starting, rename `.env_example` to `.env` and fill in the missing values. Typically you'll want `REQUIREMENTS_FILE` to match the name of your environment (e.g. `dev`).
+
 This project uses Docker for local development. To bring up all containers, run `make up` or `make build`. 
 
 To SSH into a container, run `make shell-django` or `make shell-frontend` to access the Django or VueJS containers, respectively. 
